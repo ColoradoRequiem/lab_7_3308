@@ -1,0 +1,64 @@
+//- player-info.pug
+include ../partials/header.pug
+include ../partials/menu.pug
+
+div.container
+  br
+  div.row
+    div.col-4
+      div.card
+        //- TODO: Modify the pug code below to conditionally set the image_src
+        - let image_src = '../../resources/img/helmet.jpg'
+        - if (selected_player)
+          - image_src = selected_player.img_src
+
+        img.card-img-top#player_img(src= image_src, alt="Football Player")
+        div.card-body.mx-auto
+          form.form(action="/player_info/select_player", method="get")
+            select.custom-select(name="player_choice", onchange="this.form.submit()")
+              - if (selected_player)
+                option(selected) #{selected_player.name}
+              - else
+                option(selected) Select Player
+              - if (data)
+                for item in data
+                  option(value=item.id) #{item.name}
+    div.col-8
+      div.table-responsive
+        table.table
+          //- TODO: Set the player's information. On select, fill in the player's information in each of the field below. You will need to calculate the average rushing, receiving, and passing yards.
+          tr
+            th Year
+            - if (selected_player)
+              td= selected_player.year
+            - else
+             td ?
+          tr
+            th Major
+            - if (selected_player)
+              td= selected_player.major
+            - else
+             td ?
+          tr
+            th Games Played
+            - if (gameCount)
+              td= gameCount.count
+            - else
+              td ?
+          tr
+            td Passing Yards:
+            td Avg. Passing Yards:
+            - if (gameCount && selected_player)
+              td= (selected_player.passing_yards / gameCount.count)
+          tr
+            td Rushing Yards:
+            td Avg. Rushing Yards:
+            - if (gameCount && selected_player)
+              td= (selected_player.rushing_yards / gameCount.count)
+          tr
+            td Receiving Yards:
+            td Avg. Receiving Yards:
+            - if (gameCount && selected_player)
+              td= (selected_player.receiving_yards / gameCount.count)
+
+include ../partials/footer.pug
